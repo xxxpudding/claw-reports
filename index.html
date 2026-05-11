@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📊 小爪日报 - 市场分析报告</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:#0f0f1a;color:#e0e0e0;min-height:100vh}
+.header{background:linear-gradient(135deg,#1a1a2e,#16213e);border-bottom:1px solid #2a2a4a;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.header h1{font-size:20px;color:#fff;display:flex;align-items:center;gap:8px}
+.header h1 span{color:#64b5f6}
+.header-sub{font-size:12px;color:#666}
+.header-right{font-size:12px;color:#555}
+.layout{display:flex;min-height:calc(100vh - 62px)}
+.sidebar{width:210px;flex-shrink:0;background:#14142a;border-right:1px solid #2a2a4a;padding:12px 0;overflow-y:auto;max-height:calc(100vh - 62px)}
+.sidebar-title{font-size:11px;color:#555;text-transform:uppercase;letter-spacing:1px;padding:6px 16px 10px;font-weight:600}
+.date-item{display:flex;align-items:center;padding:8px 16px;cursor:pointer;border-left:3px solid transparent;transition:all .15s;font-size:13px;color:#999;gap:6px}
+.date-item:hover{background:rgba(100,181,246,.06);color:#ccc}
+.date-item.active{background:rgba(100,181,246,.1);border-left-color:#64b5f6;color:#fff}
+.date-item .day{font-size:11px;color:#555}
+.content{flex:1;padding:24px 32px;overflow-y:auto;max-height:calc(100vh - 62px)}
+.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;height:50vh;color:#444}
+.empty-state .icon{font-size:48px;margin-bottom:12px}
+.md-body h1{font-size:24px;color:#fff;margin:0 0 12px 0;padding-bottom:10px;border-bottom:1px solid #2a2a4a}
+.md-body h2{font-size:17px;color:#64b5f6;margin:22px 0 10px;padding-left:10px;border-left:3px solid #64b5f6}
+.md-body h3{font-size:15px;color:#90caf9;margin:16px 0 6px}
+.md-body h4{font-size:14px;color:#b0bec5;margin:12px 0 4px}
+.md-body p{margin:6px 0;color:#c8c8d0;line-height:1.8}
+.md-body strong{color:#fff}
+.md-body em{color:#80cbc4}
+.md-body a{color:#64b5f6;text-decoration:none}
+.md-body a:hover{text-decoration:underline}
+.md-body ul,.md-body ol{margin:4px 0;padding-left:22px}
+.md-body li{margin:3px 0;color:#c8c8d0}
+.md-body blockquote{margin:10px 0;padding:10px 14px;border-left:3px solid #64b5f6;background:rgba(100,181,246,.05);border-radius:0 4px 4px 0;color:#b0bec5}
+.md-body blockquote strong{color:#ffcc02}
+.md-body hr{border:none;border-top:1px solid #2a2a4a;margin:16px 0}
+.md-body table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13px}
+.md-body th,.md-body td{border:1px solid #2a2a4a;padding:6px 10px;text-align:left}
+.md-body th{background:#1a1a30;color:#90caf9;font-weight:600}
+.md-body td{color:#c8c8d0}
+.md-body tr:nth-child(even) td{background:rgba(255,255,255,.015)}
+.md-body code{background:#1a1a30;padding:1px 5px;border-radius:3px;font-size:12px;color:#80cbc4}
+.md-body pre{background:#1a1a30;padding:12px 14px;border-radius:4px;overflow-x:auto;margin:10px 0;border:1px solid #2a2a4a}
+.md-body img{max-width:100%;border-radius:4px}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#333;border-radius:3px}
+@media(max-width:768px){
+.layout{flex-direction:column}
+.sidebar{width:100%;max-height:none;border-right:none;border-bottom:1px solid #2a2a4a;padding:6px 0}
+.sidebar-title{display:none}
+.date-list{display:flex;overflow-x:auto;padding:4px 10px;gap:2px}
+.date-item{white-space:nowrap;padding:5px 12px;border-left:none;border-bottom:2px solid transparent;font-size:12px;flex-shrink:0}
+.date-item.active{border-bottom-color:#64b5f6}
+.content{padding:16px}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+<div><h1>🦞 <span>小爪</span> 日报</h1><div class="header-sub">市场分析报告 · 按日期归档</div></div>
+<div class="header-right" id="reportCount"></div>
+</div>
+
+<div class="layout">
+<div class="sidebar">
+<div class="sidebar-title">📅 报告列表</div>
+<div class="date-list" id="dateList"></div>
+</div>
+<div class="content" id="content">
+<div class="empty-state"><div class="icon">📊</div><p>选择一个日期查看报告</p></div>
+</div>
+</div>
+
+<script>
+// ===== 报告数据 =====
+var REPORTS = [
+  {
+    date: "2026-04-27",
+    md: "# 📊 收盘复盘 — 2026-04-27\n\n## 指数表现\n\n| 指数 | 收盘 | 涨跌幅 |\n|------|------|--------|\n| 上证指数 | — | — |\n| 深证成指 | — | — |\n| 创业板指 | — | — |\n\n*完整数据参考当日本地报告文件。*"
+  },
+  {
+    date: "2026-05-10",
+    md: "# 📊 周末市场分析 — 2026-05-10 (周日)\n\n---\n\n## 🌏 一、宏观与外围\n\n### 1. 五一节后A股首周开门红\n- 上证指数周涨幅 +1.65%，收于 4163.85\n- 深证成指周涨幅 +3.02%，收于 15520.38\n- 创业板指周涨幅 +3.24%，收于 3792.04\n\n### 2. DeepSeek 融资 500 亿\n- 23 天内估值从 100 亿飙升至 515 亿美元\n- 创始人梁文锋自投约 200 亿\n- 国产算力逻辑强化（海光信息、寒武纪、中际旭创、新易盛）\n\n### 3. 央媒定调：加快推进新型基础设施建设\n- 算力网、新型电网并列提出\n- \"算电协同\" 成为顶层议题\n- 大唐发电三天三板打样\n\n### 4. 中东地缘局势持续紧张\n- 伊朗摧毁两个摩萨德关联行动组\n- 霍尔木兹海峡局势严峻\n\n## 📈 二、上周指数回顾\n\n| 指数 | 收盘 | 周涨幅 |\n|------|------|--------|\n| 上证 | 4163.85 | +1.65% |\n| 深证 | 15520.38 | +3.02% |\n| 创业板 | 3792.04 | +3.24% |\n\n## 🔥 三、热点板块\n\n**算电协同（本周最强主题）**\n- 大唐发电（601991）：三天三板\n- 润建股份、科华数据、中恒电气\n\n**AI/算力链（中期主线延续）**\n- 光模块、AI芯片成沪深300权重主力\n\n## 💡 四、交易策略\n\n红利持仓维持持有；科技波段重点关注算电协同、AI算力链。"
+  },
+  {
+    date: "2026-05-11",
+    md: "# 📊 盘前风向标 — 2026-05-11 (周一)\n\n---\n\n## 🌏 一、隔夜外围速览\n\n| 市场 | 最新值 | 涨跌幅 |\n|------|--------|--------|\n| 上证（上周五收盘） | 4163.85 | -0.01% |\n| WTI原油 | $99.37 | +4.21% |\n| 韩国KOSPI | 7872.84 | +5% 触发熔断 |\n\n**关键信号：**\n- 🇨🇳 特朗普5月13-15日访华 → 重大外交事件\n- 🛢️ 油价逼近$100\n- 🇰🇷 韩国熔断\n\n## 📌 二、今晨核心要闻\n\n### 1. 特朗普访华\n外交部宣布，特朗普将于5月13-15日对华国事访问。\n\n### 2. 油价飙涨\nWTI突破$99，燃油期货涨5%。\n\n### 3. 人形机器人签约2000台\n单笔最大商业化订单。\n\n### 4. 融资余额增长\n两市27735亿元，净增158亿。\n\n---\n\n# 🕐 午间复盘 — 12:00\n\n> 🚀 科创50暴涨5%\n\n| 指数 | 午盘 | 涨跌幅 |\n|------|------|--------|\n| 上证 | 4219.13 | +0.94% |\n| 深证 | 15895.75 | +2.13% |\n| 创业板 | 3911.32 | +3.03% |\n| **科创50** | **1726.98** | **+5.27%** |\n\n半日成交23233亿，放量3382亿。存储芯片、半导体设备全线爆发。\n\n---\n\n# 🌙 收盘复盘 — 15:00\n\n> 沪指站上4225，科创50盘创历史新高，成交3.56万亿\n\n| 指数 | 收盘 | 涨跌幅 |\n|------|------|--------|\n| 上证 | 4225.02 | +1.08% |\n| 深证 | 15899.30 | +2.16% |\n| 创业板 | 3928.97 | +3.50% |\n| 科创50 | 1716.69 | +4.65% |\n\n**全天成交：35640亿**，放量4895亿\n\n涨幅：存储芯片、半导体、CPO、稀土、生物疫苗（沃森生物20cm涨停）\n跌幅：贵金属、港口航运、游戏\n\n**核心洞察：**\n1. 科创50早盘创历史新高后回落，主升浪正常整固\n2. 成交3.56万亿，增量资金确认进场\n3. 防御→进攻跷跷板，资金全线转向AI算力\n4. 生物疫苗午后异动（汉坦病毒消息）"
+  }
+];
+
+// ===== 工具 =====
+var WEEKDAYS = ['日','一','二','三','四','五','六'];
+function weekday(d) { return WEEKDAYS[new Date(d).getDay()]; }
+
+function escapeHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ===== Markdown 渲染 =====
+function renderMd(text) {
+  var h = escapeHtml(text);
+
+  // code block
+  var blocks = [];
+  h = h.replace(/```(\w*)\n([\s\S]*?)```/g, function(_, lang, code) {
+    var i = blocks.length;
+    blocks.push('<pre><code>' + code.trim() + '</code></pre>');
+    return '%%B' + i + '%%';
+  });
+  h = h.replace(/`([^`]+)`/g, '<code>$1</code>');
+
+  h = h.replace(/^###### (.*$)/gm, '<h6>$1</h6>');
+  h = h.replace(/^##### (.*$)/gm, '<h5>$1</h5>');
+  h = h.replace(/^#### (.*$)/gm, '<h4>$1</h4>');
+  h = h.replace(/^### (.*$)/gm, '<h3>$1</h3>');
+  h = h.replace(/^## (.*$)/gm, '<h2>$1</h2>');
+  h = h.replace(/^# (.*$)/gm, '<h1>$1</h1>');
+  h = h.replace(/^---+$/gm, '<hr>');
+  h = h.replace(/^> (.*$)/gm, '<blockquote>$1</blockquote>');
+  h = h.replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>');
+  h = h.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  h = h.replace(/\*(.+?)\*/g, '<em>$1</em>');
+  h = h.replace(/^- (.*$)/gm, '<li class="ul">$1</li>');
+  h = h.replace(/^\d+\. (.*$)/gm, '<li class="ol">$1</li>');
+  h = h.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1">');
+  h = h.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
+
+  // table
+  h = h.replace(/\|(.+)\|/g, function(m) {
+    if (/^\|[\s\-:]+\|$/.test(m)) return '';
+    return m.split('|').filter(function(c){return c.trim()}).map(function(c){return '<td>' + c.trim() + '</td>'}).join('');
+  });
+
+  // assemble
+  var lines = h.split('\n');
+  var r = '', inTable = false, inList = false;
+  for (var i = 0; i < lines.length; i++) {
+    var t = lines[i].trim();
+    if (/^%%B\d+%%$/.test(t)) {
+      if (inList) { r += '</ul>'; inList = false; }
+      r += blocks[parseInt(t.match(/\d+/)[0])] + '\n';
+      continue;
+    }
+    if (/^<h\d/.test(t) || /^<hr/.test(t) || /^<pre/.test(t)) {
+      if (inList) { r += '</ul>'; inList = false; }
+      r += t + '\n'; continue;
+    }
+    if (/^<blockquote/.test(t) || /^<\/blockquote/.test(t)) {
+      if (inList && /^<blockquote/.test(t)) { r += '</ul>'; inList = false; }
+      r += t + '\n'; continue;
+    }
+    if (/^<li/.test(t)) {
+      if (!inList) { r += '<ul>'; inList = true; }
+      r += t + '\n'; continue;
+    }
+    if (/^<td/.test(t)) {
+      if (!inTable) { r += '<table><tr>'; inTable = true; }
+      r += t; continue;
+    }
+    if (inTable && t === '') { r += '</tr></table>\n'; inTable = false; continue; }
+    if (t === '' && inList) { r += '</ul>'; inList = false; continue; }
+    if (t && !/^</.test(t)) {
+      if (inList) { r += '</ul>'; inList = false; }
+      r += '<p>' + t + '</p>\n';
+    }
+  }
+  if (inList) r += '</ul>';
+  if (inTable) r += '</tr></table>';
+  return r;
+}
+
+// ===== UI =====
+var listEl = document.getElementById('dateList');
+var contentEl = document.getElementById('content');
+var countEl = document.getElementById('reportCount');
+
+function buildList() {
+  listEl.innerHTML = '';
+  for (var i = REPORTS.length - 1; i >= 0; i--) {
+    (function(r) {
+      var d = document.createElement('div');
+      d.className = 'date-item' + (i === REPORTS.length - 1 ? ' active' : '');
+      d.innerHTML = '<span>' + r.date + '</span><span class="day">周' + weekday(r.date) + '</span>';
+      d.addEventListener('click', function() {
+        var all = document.querySelectorAll('.date-item');
+        for (var j = 0; j < all.length; j++) all[j].classList.remove('active');
+        d.classList.add('active');
+        location.hash = r.date;
+        showReport(r);
+      });
+      listEl.appendChild(d);
+    })(REPORTS[i]);
+  }
+  countEl.textContent = '共 ' + REPORTS.length + ' 份报告';
+}
+
+function showReport(r) {
+  var dl = '<div style="font-size:12px;color:#666;margin-bottom:10px;">' + r.date + ' · 星期' + weekday(r.date) + '</div>';
+  contentEl.innerHTML = dl + '<div class="md-body">' + renderMd(r.md) + '</div>';
+}
+
+function fromHash() {
+  var h = location.hash.replace('#','');
+  for (var i = 0; i < REPORTS.length; i++) {
+    if (REPORTS[i].date === h) {
+      var items = document.querySelectorAll('.date-item');
+      for (var j = 0; j < items.length; j++) items[j].classList.remove('active');
+      if (items[items.length - 1 - i]) items[items.length - 1 - i].classList.add('active');
+      showReport(REPORTS[i]);
+      return true;
+    }
+  }
+  return false;
+}
+
+buildList();
+if (!fromHash() && REPORTS.length > 0) {
+  var first = document.querySelector('.date-item');
+  if (first) first.click();
+}
+</script>
+</body>
+</html>
