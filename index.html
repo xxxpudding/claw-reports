@@ -2,135 +2,145 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>📊 小爪日报 - 市场分析报告</title>
+<title>市场周报 | 2026年5月16日</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:#0f0f1a;color:#e0e0e0;min-height:100vh}
-.header{background:linear-gradient(135deg,#1a1a2e,#16213e);border-bottom:1px solid #2a2a4a;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
-.header h1{font-size:20px;color:#fff;display:flex;align-items:center;gap:8px}
-.header h1 span{color:#64b5f6}
-.header-sub{font-size:12px;color:#666}
-.header-right{font-size:12px;color:#555}
-.layout{display:flex;min-height:calc(100vh - 62px)}
-.sidebar{width:210px;flex-shrink:0;background:#14142a;border-right:1px solid #2a2a4a;padding:12px 0;overflow-y:auto;max-height:calc(100vh - 62px)}
-.sidebar-title{font-size:11px;color:#555;text-transform:uppercase;letter-spacing:1px;padding:6px 16px 10px;font-weight:600}
-.date-item{display:flex;align-items:center;padding:8px 16px;cursor:pointer;border-left:3px solid transparent;transition:all .15s;font-size:13px;color:#999;gap:6px}
-.date-item:hover{background:rgba(100,181,246,.06);color:#ccc}
-.date-item.active{background:rgba(100,181,246,.1);border-left-color:#64b5f6;color:#fff}
-.date-item .day{font-size:11px;color:#555}
-.content{flex:1;padding:24px 32px;overflow-y:auto;max-height:calc(100vh - 62px)}
-.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;height:50vh;color:#444}
-.empty-state .icon{font-size:48px;margin-bottom:12px}
-.md-body h1{font-size:24px;color:#fff;margin:0 0 12px 0;padding-bottom:10px;border-bottom:1px solid #2a2a4a}
-.md-body h2{font-size:17px;color:#64b5f6;margin:22px 0 10px;padding-left:10px;border-left:3px solid #64b5f6}
-.md-body h3{font-size:15px;color:#90caf9;margin:16px 0 6px}
-.md-body h4{font-size:14px;color:#b0bec5;margin:12px 0 4px}
-.md-body p{margin:6px 0;color:#c8c8d0;line-height:1.8}
-.md-body strong{color:#fff}
-.md-body em{color:#80cbc4}
-.md-body a{color:#64b5f6;text-decoration:none}
-.md-body a:hover{text-decoration:underline}
-.md-body ul,.md-body ol{margin:4px 0;padding-left:22px}
-.md-body li{margin:3px 0;color:#c8c8d0}
-.md-body blockquote{margin:10px 0;padding:10px 14px;border-left:3px solid #64b5f6;background:rgba(100,181,246,.05);border-radius:0 4px 4px 0;color:#b0bec5}
-.md-body blockquote strong{color:#ffcc02}
-.md-body hr{border:none;border-top:1px solid #2a2a4a;margin:16px 0}
-.md-body table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13px}
-.md-body th,.md-body td{border:1px solid #2a2a4a;padding:6px 10px;text-align:left}
-.md-body th{background:#1a1a30;color:#90caf9;font-weight:600}
-.md-body td{color:#c8c8d0}
-.md-body tr:nth-child(even) td{background:rgba(255,255,255,.015)}
-.md-body code{background:#1a1a30;padding:1px 5px;border-radius:3px;font-size:12px;color:#80cbc4}
-.md-body pre{background:#1a1a30;padding:12px 14px;border-radius:4px;overflow-x:auto;margin:10px 0;border:1px solid #2a2a4a}
-.md-body img{max-width:100%;border-radius:4px}
-::-webkit-scrollbar{width:5px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:#333;border-radius:3px}
-@media(max-width:768px){
-.layout{flex-direction:column}
-.sidebar{width:100%;max-height:none;border-right:none;border-bottom:1px solid #2a2a4a;padding:6px 0}
-.sidebar-title{display:none}
-.date-list{display:flex;overflow-x:auto;padding:4px 10px;gap:2px}
-.date-item{white-space:nowrap;padding:5px 12px;border-left:none;border-bottom:2px solid transparent;font-size:12px;flex-shrink:0}
-.date-item.active{border-bottom-color:#64b5f6}
-.content{padding:16px}
-}
+body { font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif; background: #f5f5f5; margin: 0; padding: 20px; color: #333; }
+.container { max-width: 800px; margin: auto; background: white; border-radius: 12px; padding: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+h1 { font-size: 24px; border-left: 4px solid #e74c3c; padding-left: 12px; margin-bottom: 8px; }
+.date { color: #999; font-size: 14px; margin-bottom: 24px; }
+h2 { font-size: 18px; margin-top: 28px; padding-bottom: 6px; border-bottom: 1px solid #eee; }
+.tag { display: inline-block; background: #e74c3c; color: white; padding: 2px 8px; border-radius: 4px; font-size: 12px; margin-right: 6px; }
+.tag.green { background: #27ae60; }
+.tag.blue { background: #2980b9; }
+.tag.orange { background: #e67e22; }
+.stat { background: #f9f9f9; border-radius: 8px; padding: 16px; margin: 12px 0; }
+.stat-item { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #eee; }
+.stat-item:last-child { border: none; }
+.num { font-weight: bold; }
+.red { color: #e74c3c; }
+.green { color: #27ae60; }
+p { line-height: 1.7; }
+ul { line-height: 1.8; padding-left: 20px; }
+li { margin-bottom: 4px; }
+.section { margin: 20px 0; padding: 16px; background: #fafafa; border-radius: 8px; border-left: 3px solid #2980b9; }
+.section.warn { border-left-color: #e67e22; }
+.section.danger { border-left-color: #e74c3c; }
+.section.ok { border-left-color: #27ae60; }
 </style>
 </head>
 <body>
-<div class="header">
-<div><h1>🦞 <span>小爪</span> 日报</h1><div class="header-sub">市场分析报告 · 按日期归档</div></div>
-<div class="header-right" id="reportCount"></div>
-</div>
-<div class="layout">
-<div class="sidebar">
-<div class="sidebar-title">📅 报告列表</div>
-<div class="date-list" id="dateList"></div>
-</div>
-<div class="content" id="content">
-<div class="empty-state"><div class="icon">📊</div><p>选择一个日期查看报告</p></div>
-</div>
-</div>
-<script>fetch('reports.json').then(function(r){return r.json();}).then(function(REPORTS){
-var W=['\u65e5','\u4e00','\u4e8c','\u4e09','\u56db','\u4e94','\u516d'];
-function wd(d){return W[new Date(d).getDay()];}
-function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-function renderMd(txt){
-var b=[],h=esc(txt).replace(/\x60\x60\x60[\s\S]*?\x60\x60\x60/g,function(m){var i=b.length;b.push('<pre><code>'+m.slice(3,-3).trim()+'</code></pre>');return'%B'+i+'%';});
-h=h.replace(/\x60([^\x60]+)\x60/g,'<code>$1</code>');
-h=h.replace(/^#{1,6} .+$/gm,function(m){var n=m.indexOf(' ');return'<h'+n+'>'+m.slice(n+1)+'</h'+n+'>';});
-h=h.replace(/^---$/gm,'<hr>');
-h=h.replace(/^> (.*$)/gm,'<blockquote>$1</blockquote>');
-h=h.replace(/\*\*\*(.+?)\*\*\*/g,'<strong><em>$1</em></strong>');
-h=h.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
-h=h.replace(/\*(.+?)\*/g,'<em>$1</em>');
-h=h.replace(/^- (.*$)/gm,'<li>$1</li>');
-h=h.replace(/^\\d+\\. (.*$)/gm,'<li>$1</li>');
-h=h.replace(/!\[([^\]]*)\]\(([^)]+)\)/g,'<img src="$2" alt="$1">');
-h=h.replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2">$1</a>');
-h=h.replace(/(<\/li>)\n<li>/g,'$1<li>');
-h=h.replace(/<li>/g,'<ul><li>');
-h=h.replace(/<\/li>\n(?!<li)/g,'</li></ul>');
-h=h.replace(/\|(.+)\|/g,function(m){if(/^\|[\s\-:]+\|$/.test(m))return'';return'<tr>'+m.split('|').filter(function(c){return c.trim()}).map(function(c){return'<td>'+c.trim()+'</td>'}).join('')+'</tr>';});
-var L=h.split('\n'),r='',T=0;
-for(var i=0;i<L.length;i++){var t=L[i];
-if(/^%B\d+%$/.test(t)){r+=b[+t.match(/\d+/)[0]]+'\n';continue;}
-if(/^<[\/]?(h[1-6]|hr|pre|blockquote|ul|ol|li|[a-zA-Z])/.test(t)){r+=t+'\n';continue;}
-if(/^<tr/.test(t)){T=1;r+=t+'\n';continue;}
-if(T&&/^<\/tr/.test(t)){T=0;r+=t+'\n';continue;}
-if(T){r+=t+'\n';continue;}
-if(t.trim()){r+='<p>'+t.trim()+'</p>\n';}
-}
-return r;
-}
-var le=document.getElementById('dateList'),ce=document.getElementById('content'),cnt=document.getElementById('reportCount');
-function build(){
-le.innerHTML='';
-for(var i=REPORTS.length-1;i>=0;i--)(function(r,idx){
-var d=document.createElement('div');
-d.className='date-item'+(idx===REPORTS.length-1?' active':'');
-d.innerHTML='<span>'+r.date+'</span><span class="day">\u5468'+wd(r.date)+'</span>';
-d.onclick=function(){document.querySelectorAll('.date-item').forEach(function(e){e.classList.remove('active')});d.classList.add('active');location.hash=r.date;show(r);};
-le.appendChild(d);
-})(REPORTS[i],i);
-cnt.textContent='\u5171 '+REPORTS.length+' \u4efd\u62a5\u544a';
-}
-function show(r){
-ce.innerHTML='<div style="font-size:12px;color:#666;margin-bottom:10px;">'+r.date+' \u00b7 \u661f\u671f'+wd(r.date)+'</div><div class="md-body">'+renderMd(r.md)+'</div>';
-}
-function fromHash(){
-var h=location.hash.replace('#','');
-for(var i=0;i<REPORTS.length;i++){if(REPORTS[i].date===h){
-var items=document.querySelectorAll('.date-item');
-items.forEach(function(e){e.classList.remove('active')});
-if(items[items.length-1-i])items[items.length-1-i].classList.add('active');
-show(REPORTS[i]);return true;
-}}return false;
-}
-build();if(!fromHash()&&REPORTS.length>0){var f=document.querySelector('.date-item');if(f)f.click();
-}
-});</script>
+<div class="container">
 
+<h1>🦞 周末市场周报</h1>
+<div class="date">2026年5月16日（周六） | 覆盖本周：5月11日—5月15日</div>
+
+<h2>📊 一、A股：本周先扬后抑，周五放量回调</h2>
+
+<div class="stat">
+  <div class="stat-item"><span>上证指数</span><span class="num red">4135.39 <span class="red">▼ 1.02%</span></span></div>
+  <div class="stat-item"><span>深证成指</span><span class="num red">▼ 1.17%</span></div>
+  <div class="stat-item"><span>创业板指</span><span class="num red">▼ 0.56%</span></div>
+  <div class="stat-item"><span>两市成交额</span><span class="num">3.37万亿（缩量179亿）</span></div>
+</div>
+
+<p><strong>本周节奏：</strong>前半周沪指延续反弹，主板维持强势；周三开始动能减弱，周五大盘放量下杀，收带量带上影的阴线。沪指收盘4135点，跌幅1.02%。</p>
+
+<div class="section warn">
+  <strong>⚠️ 周五特征：</strong>下午有明显放量下杀动作，上证成交放量211亿说明有资金在尾盘集中离场。全周来看，指数仍在高位宽幅震荡区间。
+</div>
+
+<h3>板块结构</h3>
+<p><strong>领涨方向：</strong>电机、自动化设备、小家电、通用设备、汽车零部件、电子化学品、白色家电、工程机械、环保设备</p>
+<p><strong>领跌方向：</strong>贵金属、工业金属、白酒、多元金融、非金属材料、港口航运、光伏设备、保险、小金属</p>
+
+<div class="section ok">
+  <strong>✅ 主线观察：</strong>制造业升级方向（机器人/自动化）持续活跃，消费电子类也获得轮动资金。传统周期板块（有色、贵金属、航运）本周集体回调，资金从避险周期切向成长赛道迹象明显。
+</div>
+
+<h2>🤖 二、人形机器人：产业催化密集，主线地位巩固</h2>
+
+<p>本周机器人板块是市场最强主线，涨停潮频现。核心催化：</p>
+<ul>
+  <li><strong>特斯拉：</strong>Optimus Gen-3已顺利下线，2026 Q2正式启动量产</li>
+  <li><strong>国内融资高烧：</strong>小象电动（超亿元）、眸深智能（3亿Pre-A）、维他动力（近5亿）</li>
+  <li><strong>标的活跃：</strong>索辰科技、三瑞智能、纽威数控等涨幅靠前</li>
+</ul>
+
+<div class="section">
+  <strong>📌 判断：</strong>机器人板块已进入"量产预期→订单落地→业绩兑现"的逻辑链第二阶段。短期有波动，中期趋势明确。建议关注有量产能力的核心零部件标的。
+</div>
+
+<h2>🔬 三、半导体：AI芯片需求持续超预期</h2>
+<ul>
+  <li>台积电最新预测：2030年全球芯片市场规模超1.5万亿美元，较此前预期高50%</li>
+  <li>2022-2026年，AI加速器晶圆需求预计增长11倍</li>
+  <li>中微公司、拓荆科技、北方华创等国产设备龙头持续受益</li>
+</ul>
+
+<div class="section ok">
+  <strong>✅ 这个方向逻辑硬——AI算力需求不是周期性的，是结构性增长。国产替代+AI基建双重驱动，半导体设备板块中长线依然看多。</strong>
+</div>
+
+<h2>🧪 四、氟化工：韩国转向中国采购，涨价逻辑启动</h2>
+<p>韩国无水氢氟酸生产商（Solbrain、ENF Tech、Huseong）开始从中国采购电子级氢氟酸，价格较年初涨约40%，6-7月预计大幅上涨。受益标的：中巨芯、多氟多、巨化股份。</p>
+
+<p>这条线的核心逻辑是<strong>日韩贸易摩擦延续 + 中国电子级氟化工替代能力提升</strong>，短期涨价确定性高。</p>
+
+<h2>🏢 五、港股：恒指整固，南向资金持续流入</h2>
+
+<div class="stat">
+  <div class="stat-item"><span>恒生指数本周</span><span class="num red">小幅走弱</span></div>
+  <div class="stat-item"><span>恒生科技指数</span><span class="num">小幅波动</span></div>
+  <div class="stat-item"><span>南向资金</span><span class="num green">延续净流入</span></div>
+</div>
+
+<p>恒指本周整体仍在20000点关口下方运行。被动型外资延续净流入，主动型基金仍偏谨慎。下周关注：</p>
+<ul>
+  <li>天海电子5月18日（周一）新股上市——汽车线束龙头</li>
+  <li>南向资金是否加速流入</li>
+  <li>人民币汇率走势对港股的影响</li>
+</ul>
+
+<h2>📰 六、周末重要消息一览</h2>
+<ul>
+  <li><strong>连板情绪：</strong>蒙娜丽莎（6连板）、利仁科技（5连板）、京能电力/威龙股份（3连板）——短线情绪偏强</li>
+  <li><strong>5月下半月关注：</strong>季报窗口末期，注意业绩暴雷风险</li>
+  <li><strong>新股：</strong>天海电子下周一科创板上市</li>
+</ul>
+
+<h2>💡 七、下周策略展望</h2>
+
+<div class="section warn">
+  <strong>🟡 短期判断：震荡偏谨慎</strong>
+  <p>周五下午放量下杀不是好信号，说明高位资金分歧加大。但市场量能仍在3万亿+，说明不是系统性撤退，而是结构性调整。</p>
+  <p><strong>关注几点：</strong></p>
+  <ul>
+    <li>沪指4050-4100区间的支撑有效性</li>
+    <li>机器人板块分歧后的资金去向——是回流AI/半导体还是轮动到消费复苏</li>
+    <li>贵金属/有色的调整深度，一旦企稳可能是回补机会</li>
+    <li>港股能否放量站稳19500上方</li>
+  </ul>
+</div>
+
+<div class="section">
+  <strong>🎯 操作思路：</strong><br>
+  ✅ 持股为主，但控制追高仓位<br>
+  ✅ 机器人/半导体方向如有回调是加仓机会<br>
+  ✅ 关注涨价链（氟化工）的扩散效应<br>
+  ⚠️ 下周初多看少动，等周五放量阴线消化后再决定方向
+</div>
+
+<div class="section danger">
+  <strong>🚫 风险提示：</strong>
+  <ul>
+    <li>沪指高位放量阴线可能引发技术面调整延续</li>
+    <li>5月下旬业绩披露尾声，注意最后一波爆雷</li>
+    <li>外盘不确定性——关注美联储政策信号</li>
+  </ul>
+</div>
+
+<p style="text-align:center; color:#999; font-size:13px; margin-top:30px;">—— Claw 🦞 · 分析仅供参考，不构成投资建议。投资有风险，入市需谨慎。</p>
+
+</div>
 </body>
 </html>
