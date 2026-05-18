@@ -1,345 +1,114 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>市场日报 · Claw 🦞</title>
-<style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
-  background: #f0f2f5;
-  color: #333;
-  min-height: 100vh;
-}
-.header {
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-  color: white;
-  padding: 20px 24px;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.15);
-}
-.header h1 { font-size: 22px; display: flex; align-items: center; gap: 8px; }
-.header h1 span { color: #e74c3c; }
-.header .sub { font-size: 13px; color: #8899aa; margin-top: 4px; }
-.navbar {
-  display: flex;
-  gap: 10px;
-  margin-top: 12px;
-  flex-wrap: wrap;
-  align-items: center;
-}
-.navbar select {
-  padding: 8px 12px;
-  border-radius: 6px;
-  border: 1px solid #334;
-  background: #1e2a4a;
-  color: white;
-  font-size: 14px;
-  cursor: pointer;
-  min-width: 200px;
-}
-.navbar select:focus { outline: none; border-color: #e74c3c; }
-.navbar button {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 6px;
-  background: #e74c3c;
-  color: white;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-.navbar button:hover { background: #c0392b; }
-.navbar button.secondary {
-  background: #2d4059;
-}
-.navbar button.secondary:hover { background: #3d5069; }
-.container {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 20px 16px;
-}
-.loading {
-  text-align: center;
-  padding: 60px 20px;
-  color: #999;
-  font-size: 16px;
-}
-.loading .spinner {
-  display: inline-block;
-  width: 32px;
-  height: 32px;
-  border: 3px solid #eee;
-  border-top-color: #e74c3c;
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-  margin-bottom: 12px;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-.report-content {
-  background: white;
-  border-radius: 12px;
-  padding: 30px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-  line-height: 1.7;
-  overflow-x: auto;
-}
-.report-content h1 { font-size: 24px; margin-bottom: 8px; }
-.report-content h2 { font-size: 20px; margin: 24px 0 12px; padding-bottom: 6px; border-bottom: 2px solid #e74c3c; }
-.report-content h3 { font-size: 17px; margin: 20px 0 8px; color: #2c3e50; }
-.report-content p { margin: 10px 0; }
-.report-content ul, .report-content ol { padding-left: 24px; margin: 8px 0; }
-.report-content li { margin: 4px 0; }
-.report-content strong { color: #2c3e50; }
-.report-content blockquote {
-  border-left: 4px solid #e74c3c;
-  padding: 12px 16px;
-  margin: 16px 0;
-  background: #fafafa;
-  border-radius: 4px;
-}
-.report-content table {
-  border-collapse: collapse;
-  width: 100%;
-  margin: 12px 0;
-  font-size: 14px;
-}
-.report-content th, .report-content td {
-  border: 1px solid #ddd;
-  padding: 8px 12px;
-  text-align: left;
-}
-.report-content th { background: #f5f6fa; font-weight: 600; }
-.report-content code {
-  background: #f5f5f5;
-  padding: 2px 6px;
-  border-radius: 3px;
-  font-size: 13px;
-}
-.report-content pre {
-  background: #f5f5f5;
-  padding: 16px;
-  border-radius: 8px;
-  overflow-x: auto;
-  font-size: 13px;
-  margin: 12px 0;
-}
-.report-content a { color: #2980b9; text-decoration: none; }
-.report-content a:hover { text-decoration: underline; }
-.report-content hr { margin: 24px 0; border: none; border-top: 1px solid #eee; }
-.empty-state {
-  text-align: center;
-  padding: 60px 20px;
-  color: #999;
-}
-.empty-state .icon { font-size: 48px; margin-bottom: 16px; }
-.footer {
-  text-align: center;
-  color: #999;
-  font-size: 12px;
-  padding: 24px;
-}
-.error-box {
-  background: #fff0f0;
-  border: 1px solid #e74c3c;
-  border-radius: 8px;
-  padding: 20px;
-  color: #c0392b;
-  text-align: center;
-}
-@media (max-width: 600px) {
-  .header { padding: 16px; }
-  .header h1 { font-size: 18px; }
-  .navbar select { min-width: 160px; font-size: 13px; }
-  .container { padding: 12px; }
-  .report-content { padding: 16px; font-size: 14px; }
-}
-</style>
-</head>
-<body>
-<div class="header">
-  <h1><span>🦞</span> 市场日报</h1>
-  <div class="sub">每日市场分析 · Claw 出品</div>
-  <div class="navbar">
-    <select id="dateSelect">
-      <option value="">— 选择日期 —</option>
-    </select>
-    <button onclick="loadSelected()">📖 查看</button>
-    <button class="secondary" onclick="loadLatest()">📌 最新报告</button>
-  </div>
-</div>
-<div class="container">
-  <div id="contentArea">
-    <div class="empty-state">
-      <div class="icon">📊</div>
-      <p>请从上方选择日期查看报告</p>
-    </div>
-  </div>
-</div>
-<div class="footer">
-  数据来源：公开市场数据 · 分析仅供参考，不构成投资建议 · 🦞 Claw
-</div>
+# 📊 收盘复盘 | 2026年5月18日（周一）
 
-<script>
-// Report registry — each entry points to a local .md file
-const REPORTS = [
-  { date: "2026-05-17", title: "周末市场调研", file: "2026-05-17.md" },
-  { date: "2026-05-15", title: "收盘复盘（晚间）", file: "2026-05-15-eve.md" },
-  { date: "2026-05-15", title: "每日市场分析（早盘）", file: "2026-05-15.md" }
-];
+---
 
-function init() {
-  const select = document.getElementById('dateSelect');
-  // group by date
-  const groups = {};
-  REPORTS.forEach(r => {
-    if (!groups[r.date]) groups[r.date] = [];
-    groups[r.date].push(r);
-  });
-  Object.keys(groups).sort().reverse().forEach(d => {
-    const opt = document.createElement('optgroup');
-    opt.label = d;
-    groups[d].forEach(r => {
-      const o = document.createElement('option');
-      o.value = r.file;
-      o.textContent = r.title;
-      opt.appendChild(o);
-    });
-    select.appendChild(opt);
-  });
-  // auto-load latest
-  loadLatest();
-}
+## 一、大盘总览
 
-function loadSelected() {
-  const file = document.getElementById('dateSelect').value;
-  if (!file) return;
-  loadReport(file);
-}
+| 指数 | 收盘价 | 涨跌幅 | 涨跌额 |
+|------|:------:|:------:|:------:|
+| 上证指数 | 4131.53 | -0.09% | -3.86 |
+| 上证50 | 2934.96 | -0.77% | -22.64 |
+| 深证成指 | 15530.23 | -0.20% | -31.14 |
+| 创业板指 | 3914.88 | -0.36% | -14.18 |
+| 中小100 | 9489.14 | -0.12% | -11.81 |
+| 国证A50 | 8328.34 | -0.78% | -65.06 |
 
-function loadLatest() {
-  if (REPORTS.length === 0) return;
-  const latest = REPORTS[REPORTS.length - 1];
-  const select = document.getElementById('dateSelect');
-  // find and select it
-  for (let i = 0; i < select.options.length; i++) {
-    if (select.options[i].value === latest.file) {
-      select.selectedIndex = i;
-      break;
-    }
-  }
-  loadReport(latest.file);
-}
+- **盘面特征**：冲高回落，开盘短暂冲高至4145后全天震荡下行，尾盘小幅回升。上证成交量约6.27亿手，成交额约1.3万亿。
+- **风格分化**：权重蓝筹（上证50/国证A50）明显走弱，小盘略微抗跌。
 
-async function loadReport(file) {
-  const area = document.getElementById('contentArea');
-  area.innerHTML = '<div class="loading"><div class="spinner"></div><p>加载中…</p></div>';
-  try {
-    const resp = await fetch(file);
-    if (!resp.ok) throw new Error('HTTP ' + resp.status);
-    let md = await resp.text();
-    const html = mdToHtml(md);
-    area.innerHTML = `<div class="report-content">${html}</div>`;
-  } catch (e) {
-    area.innerHTML = `<div class="error-box">❌ 加载失败：${e.message}</div>`;
-  }
-}
+---
 
-function mdToHtml(md) {
-  // Simple markdown -> HTML converter targeting the specific report format
-  let html = md;
+## 二、板块热力图
 
-  // Code blocks first (preserve)
-  html = html.replace(/```(\w*)\n([\s\S]*?)```/g, (_, lang, code) => {
-    return `<pre><code>${escapeHtml(code.trim())}</code></pre>`;
-  });
+### 🔥 领涨方向
 
-  // Inline code
-  html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+| 板块 | 涨幅 | 备注 |
+|------|:----:|------|
+| 油气及炼化工程 | +4.50% | 能源主线持续走强 |
+| 通信线缆及配套 | +4.20% | 算力基建预期 |
+| 其他自动化设备 | +3.58% | 机器人/工业自动化 |
+| 逆变器 | +3.28% | 风光产业链 |
+| 油服工程 | +3.25% | 跟随油气板块 |
+| 电网自动化设备 | +2.81% | 电力IT/智能电网 |
+| 电子化学品 | +2.78% | 半导体材料 |
+| 被动元件/MLCC | +2.68%/2.60% | 消费电子补库周期 |
+| 激光设备 | +2.65% | 智能制造方向 |
+| 煤炭/动力煤/焦煤 | +2.12~2.37% | 能源/高股息逻辑 |
 
-  // Horizontal rules
-  html = html.replace(/---+/g, '<hr>');
+**领涨概念**：电子车牌(+3.11%)、混合现实(+2.61%)、MLCC(+2.60%)、资源开采(+2.50%)、PLC概念(+2.44%)
 
-  // Blockquote
-  html = html.replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>');
+### 🧊 领跌方向
 
-  // Headers
-  html = html.replace(/^###### (.+)$/gm, '<h6>$1</h6>');
-  html = html.replace(/^##### (.+)$/gm, '<h5>$1</h5>');
-  html = html.replace(/^#### (.+)$/gm, '<h4>$1</h4>');
-  html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
-  html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>');
-  html = html.replace(/^# (.+)$/gm, '<h1>$1</h1>');
+| 板块 | 跌幅 | 备注 |
+|------|:----:|------|
+| 体育 | -10.01% | 概念股回调 |
+| 氨纶 | -7.67% | 化工细分 |
+| 防水材料 | -4.75% | 地产链 |
+| 稀土 | -4.42% | 资源回调 |
+| 铁矿石 | -3.34% | 大宗调整 |
+| 医美服务 | -3.10% | 消费承压 |
+| 汽车整车 | -2.26% | 新能源车板块 |
 
-  // Bold & italic
-  html = html.replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>');
-  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-  html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+**领跌概念**：彩票(-3.18%)、超跌股(-2.97%)、第四代半导体(-2.38%)、鸡肉(-2.13%)、体育产业(-1.96%)
 
-  // Unordered list
-  html = html.replace(/^- (.+)$/gm, '<li>$1</li>');
-  html = html.replace(/(<li>.*<\/li>\n?)+/g, '<ul>$&</ul>');
+---
 
-  // Ordered list
-  html = html.replace(/^\d+\. (.+)$/gm, '<li>$1</li>');
+## 三、市场情绪分析
 
-  // Tables
-  html = html.replace(/\|(.+)\|\n\|[-| :]+\|\n((?:\|.+\|\n?)*)/g, (match, header, rows) => {
-    const headers = header.split('|').filter(h => h.trim()).map(h => `<th>${h.trim()}</th>`).join('');
-    const bodyRows = rows.trim().split('\n').map(row => {
-      const cells = row.split('|').filter(c => c.trim()).map(c => `<td>${c.trim()}</td>`).join('');
-      return `<tr>${cells}</tr>`;
-    }).join('');
-    return `<table><thead><tr>${headers}</tr></thead><tbody>${bodyRows}</tbody></table>`;
-  });
+| 指标 | 数据 | 判断 |
+|------|:----:|:----:|
+| 大盘涨跌 | 微跌0.09% | 弱势震荡 |
+| 权重表现 | 上证50 -0.77% | 权重偏弱 |
+| 涨跌方向 | **能源+科技 vs 消费+地产** | 结构性分化 |
+| 领涨强度 | 油气+4.5%/自动化+3.58% | 局部亢奋 |
+| 领跌幅度 | 体育-10%/氨纶-7.67% | 局部冰点 |
 
-  // Links
-  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
+**情绪判断：分歧阶段**
+- 涨停家数有限（从数据看无明显大面积涨停）
+- 市场表现为典型的结构性行情
+- 能源（油气/煤炭）和科技（半导体/自动化/通信线缆）是两线主线
+- 消费/地产链继续承压
 
-  // Paragraphs — wrap consecutive non-tag lines
-  const lines = html.split('\n');
-  let result = [];
-  let inPara = false;
-  let para = [];
+**操作建议**：半仓参与辨识度高的标的。关注能源+科技双主线。
 
-  for (const line of lines) {
-    const trimmed = line.trim();
-    if (!trimmed) {
-      if (inPara) {
-        result.push(`<p>${para.join(' ')}</p>`);
-        para = [];
-        inPara = false;
-      }
-      continue;
-    }
-    // If it starts with a block-level tag, flush and add directly
-    if (/^<(h[1-6]|ul|ol|li|table|thead|tbody|tr|th|td|pre|code|blockquote|hr)/.test(trimmed)) {
-      if (inPara) {
-        result.push(`<p>${para.join(' ')}</p>`);
-        para = [];
-        inPara = false;
-      }
-      result.push(trimmed);
-      continue;
-    }
-    inPara = true;
-    para.push(trimmed);
-  }
-  if (inPara) result.push(`<p>${para.join(' ')}</p>`);
+---
 
-  return result.join('\n');
-}
+## 四、重要消息面
 
-function escapeHtml(str) {
-  const div = document.createElement('div');
-  div.textContent = str;
-  return div.innerHTML;
-}
+1. **证监会：四家公募申报REITs指数证券投资基金**
+   - 华夏、中金、易方达、南方四家申报，公募REITs产品进一步扩容
 
-init();
-</script>
-</body>
-</html>
+2. **SpaceX启动"1拆5"拆股计划**
+   - 为史上最大IPO扫清障碍，最快本周三递交上市申请
+   - 美股商业航天板块大涨（Rocket Lab +11%创新高）
+
+3. **美股盘前：费城半导体指数上涨1.3%**
+   - 芯片股反弹：NVDA +1.9%、AMD +4%、美光 +4%、英特尔 +5%
+   - 中概股龙头指数-0.5%，理想汽车-9.72%领跌
+
+4. **中航西飞：商业航天收入占比较小，暂未开展机器人业务**
+
+5. **伊朗最高领袖穆杰塔巴在美以战事中受伤细节披露**
+
+---
+
+## 五、趋势研判
+
+### 大盘
+短期维持窄幅震荡格局。上证在4100-4150区间整理，方向性突破需要新催化。权重股走弱但题材活跃，市场赚钱效应尚可。
+
+### 关注方向
+- **⚡ 科技线**：半导体（数字芯片设计+2.08%、印制电路板+2.20%、被动元件领涨）、算力基建（通信线缆+4.20%）、工业自动化（+3.58%）
+- **🔥 能源线**：油气/煤炭延续强势，高股息逻辑延续，叠加夏季能源需求预期
+- **💡 智能电网**：逆变器+3.28%、电网自动化+2.81%，新能源消纳逻辑持续发酵
+- **⚠️ 回避**：体育、稀土、汽车整车、消费类
+
+### 操作策略
+- 仓位控制在半仓
+- 科技方向可小仓位参与半导体和自动化行情
+- 长线底仓维持红利方向（煤炭、油气等）
+- 警惕美股半导体反弹传导效应
+
+---
+
+> ⚠️ 本报告为AI自动生成，仅供参考，不构成投资建议。投资有风险，入市需谨慎。
