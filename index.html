@@ -1,114 +1,136 @@
-# 📊 收盘复盘 | 2026年5月18日（周一）
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📊 小爪日报 - 市场分析报告</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:#0f0f1a;color:#e0e0e0;min-height:100vh}
+.header{background:linear-gradient(135deg,#1a1a2e,#16213e);border-bottom:1px solid #2a2a4a;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.header h1{font-size:20px;color:#fff;display:flex;align-items:center;gap:8px}
+.header h1 span{color:#64b5f6}
+.header-sub{font-size:12px;color:#666}
+.header-right{font-size:12px;color:#555}
+.layout{display:flex;min-height:calc(100vh - 62px)}
+.sidebar{width:210px;flex-shrink:0;background:#14142a;border-right:1px solid #2a2a4a;padding:12px 0;overflow-y:auto;max-height:calc(100vh - 62px)}
+.sidebar-title{font-size:11px;color:#555;text-transform:uppercase;letter-spacing:1px;padding:6px 16px 10px;font-weight:600}
+.date-item{display:flex;align-items:center;padding:8px 16px;cursor:pointer;border-left:3px solid transparent;transition:all .15s;font-size:13px;color:#999;gap:6px}
+.date-item:hover{background:rgba(100,181,246,.06);color:#ccc}
+.date-item.active{background:rgba(100,181,246,.1);border-left-color:#64b5f6;color:#fff}
+.date-item .day{font-size:11px;color:#555}
+.content{flex:1;padding:24px 32px;overflow-y:auto;max-height:calc(100vh - 62px)}
+.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;height:50vh;color:#444}
+.empty-state .icon{font-size:48px;margin-bottom:12px}
+.md-body h1{font-size:24px;color:#fff;margin:0 0 12px 0;padding-bottom:10px;border-bottom:1px solid #2a2a4a}
+.md-body h2{font-size:17px;color:#64b5f6;margin:22px 0 10px;padding-left:10px;border-left:3px solid #64b5f6}
+.md-body h3{font-size:15px;color:#90caf9;margin:16px 0 6px}
+.md-body h4{font-size:14px;color:#b0bec5;margin:12px 0 4px}
+.md-body p{margin:6px 0;color:#c8c8d0;line-height:1.8}
+.md-body strong{color:#fff}
+.md-body em{color:#80cbc4}
+.md-body a{color:#64b5f6;text-decoration:none}
+.md-body a:hover{text-decoration:underline}
+.md-body ul,.md-body ol{margin:4px 0;padding-left:22px}
+.md-body li{margin:3px 0;color:#c8c8d0}
+.md-body blockquote{margin:10px 0;padding:10px 14px;border-left:3px solid #64b5f6;background:rgba(100,181,246,.05);border-radius:0 4px 4px 0;color:#b0bec5}
+.md-body blockquote strong{color:#ffcc02}
+.md-body hr{border:none;border-top:1px solid #2a2a4a;margin:16px 0}
+.md-body table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13px}
+.md-body th,.md-body td{border:1px solid #2a2a4a;padding:6px 10px;text-align:left}
+.md-body th{background:#1a1a30;color:#90caf9;font-weight:600}
+.md-body td{color:#c8c8d0}
+.md-body tr:nth-child(even) td{background:rgba(255,255,255,.015)}
+.md-body code{background:#1a1a30;padding:1px 5px;border-radius:3px;font-size:12px;color:#80cbc4}
+.md-body pre{background:#1a1a30;padding:12px 14px;border-radius:4px;overflow-x:auto;margin:10px 0;border:1px solid #2a2a4a}
+.md-body img{max-width:100%;border-radius:4px}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#333;border-radius:3px}
+@media(max-width:768px){
+.layout{flex-direction:column}
+.sidebar{width:100%;max-height:none;border-right:none;border-bottom:1px solid #2a2a4a;padding:6px 0}
+.sidebar-title{display:none}
+.date-list{display:flex;overflow-x:auto;padding:4px 10px;gap:2px}
+.date-item{white-space:nowrap;padding:5px 12px;border-left:none;border-bottom:2px solid transparent;font-size:12px;flex-shrink:0}
+.date-item.active{border-bottom-color:#64b5f6}
+.content{padding:16px}
+}
+</style>
+</head>
+<body>
+<div class="header">
+<div><h1>🦞 <span>小爪</span> 日报</h1><div class="header-sub">市场分析报告 · 按日期归档</div></div>
+<div class="header-right" id="reportCount"></div>
+</div>
+<div class="layout">
+<div class="sidebar">
+<div class="sidebar-title">📅 报告列表</div>
+<div class="date-list" id="dateList"></div>
+</div>
+<div class="content" id="content">
+<div class="empty-state"><div class="icon">📊</div><p>选择一个日期查看报告</p></div>
+</div>
+</div>
+<script>fetch('reports.json').then(function(r){return r.json();}).then(function(REPORTS){
+var W=['\u65e5','\u4e00','\u4e8c','\u4e09','\u56db','\u4e94','\u516d'];
+function wd(d){return W[new Date(d).getDay()];}
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function renderMd(txt){
+var b=[],h=esc(txt).replace(/\x60\x60\x60[\s\S]*?\x60\x60\x60/g,function(m){var i=b.length;b.push('<pre><code>'+m.slice(3,-3).trim()+'</code></pre>');return'%B'+i+'%';});
+h=h.replace(/\x60([^\x60]+)\x60/g,'<code>$1</code>');
+h=h.replace(/^#{1,6} .+$/gm,function(m){var n=m.indexOf(' ');return'<h'+n+'>'+m.slice(n+1)+'</h'+n+'>';});
+h=h.replace(/^---$/gm,'<hr>');
+h=h.replace(/^> (.*$)/gm,'<blockquote>$1</blockquote>');
+h=h.replace(/\*\*\*(.+?)\*\*\*/g,'<strong><em>$1</em></strong>');
+h=h.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+h=h.replace(/\*(.+?)\*/g,'<em>$1</em>');
+h=h.replace(/^- (.*$)/gm,'<li>$1</li>');
+h=h.replace(/^\\d+\\. (.*$)/gm,'<li>$1</li>');
+h=h.replace(/!\[([^\]]*)\]\(([^)]+)\)/g,'<img src="$2" alt="$1">');
+h=h.replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2">$1</a>');
+h=h.replace(/(<\/li>)\n<li>/g,'$1<li>');
+h=h.replace(/<li>/g,'<ul><li>');
+h=h.replace(/<\/li>\n(?!<li)/g,'</li></ul>');
+h=h.replace(/\|(.+)\|/g,function(m){if(/^\|[\s\-:]+\|$/.test(m))return'';return'<tr>'+m.split('|').filter(function(c){return c.trim()}).map(function(c){return'<td>'+c.trim()+'</td>'}).join('')+'</tr>';});
+var L=h.split('\n'),r='',T=0;
+for(var i=0;i<L.length;i++){var t=L[i];
+if(/^%B\d+%$/.test(t)){r+=b[+t.match(/\d+/)[0]]+'\n';continue;}
+if(/^<[\/]?(h[1-6]|hr|pre|blockquote|ul|ol|li|[a-zA-Z])/.test(t)){r+=t+'\n';continue;}
+if(/^<tr/.test(t)){T=1;r+=t+'\n';continue;}
+if(T&&/^<\/tr/.test(t)){T=0;r+=t+'\n';continue;}
+if(T){r+=t+'\n';continue;}
+if(t.trim()){r+='<p>'+t.trim()+'</p>\n';}
+}
+return r;
+}
+var le=document.getElementById('dateList'),ce=document.getElementById('content'),cnt=document.getElementById('reportCount');
+function build(){
+le.innerHTML='';
+for(var i=REPORTS.length-1;i>=0;i--)(function(r,idx){
+var d=document.createElement('div');
+d.className='date-item'+(idx===REPORTS.length-1?' active':'');
+d.innerHTML='<span>'+r.date+'</span><span class="day">\u5468'+wd(r.date)+'</span>';
+d.onclick=function(){document.querySelectorAll('.date-item').forEach(function(e){e.classList.remove('active')});d.classList.add('active');location.hash=r.date;show(r);};
+le.appendChild(d);
+})(REPORTS[i],i);
+cnt.textContent='\u5171 '+REPORTS.length+' \u4efd\u62a5\u544a';
+}
+function show(r){
+ce.innerHTML='<div style="font-size:12px;color:#666;margin-bottom:10px;">'+r.date+' \u00b7 \u661f\u671f'+wd(r.date)+'</div><div class="md-body">'+renderMd(r.md)+'</div>';
+}
+function fromHash(){
+var h=location.hash.replace('#','');
+for(var i=0;i<REPORTS.length;i++){if(REPORTS[i].date===h){
+var items=document.querySelectorAll('.date-item');
+items.forEach(function(e){e.classList.remove('active')});
+if(items[items.length-1-i])items[items.length-1-i].classList.add('active');
+show(REPORTS[i]);return true;
+}}return false;
+}
+build();if(!fromHash()&&REPORTS.length>0){var f=document.querySelector('.date-item');if(f)f.click();
+}
+});</script>
 
----
-
-## 一、大盘总览
-
-| 指数 | 收盘价 | 涨跌幅 | 涨跌额 |
-|------|:------:|:------:|:------:|
-| 上证指数 | 4131.53 | -0.09% | -3.86 |
-| 上证50 | 2934.96 | -0.77% | -22.64 |
-| 深证成指 | 15530.23 | -0.20% | -31.14 |
-| 创业板指 | 3914.88 | -0.36% | -14.18 |
-| 中小100 | 9489.14 | -0.12% | -11.81 |
-| 国证A50 | 8328.34 | -0.78% | -65.06 |
-
-- **盘面特征**：冲高回落，开盘短暂冲高至4145后全天震荡下行，尾盘小幅回升。上证成交量约6.27亿手，成交额约1.3万亿。
-- **风格分化**：权重蓝筹（上证50/国证A50）明显走弱，小盘略微抗跌。
-
----
-
-## 二、板块热力图
-
-### 🔥 领涨方向
-
-| 板块 | 涨幅 | 备注 |
-|------|:----:|------|
-| 油气及炼化工程 | +4.50% | 能源主线持续走强 |
-| 通信线缆及配套 | +4.20% | 算力基建预期 |
-| 其他自动化设备 | +3.58% | 机器人/工业自动化 |
-| 逆变器 | +3.28% | 风光产业链 |
-| 油服工程 | +3.25% | 跟随油气板块 |
-| 电网自动化设备 | +2.81% | 电力IT/智能电网 |
-| 电子化学品 | +2.78% | 半导体材料 |
-| 被动元件/MLCC | +2.68%/2.60% | 消费电子补库周期 |
-| 激光设备 | +2.65% | 智能制造方向 |
-| 煤炭/动力煤/焦煤 | +2.12~2.37% | 能源/高股息逻辑 |
-
-**领涨概念**：电子车牌(+3.11%)、混合现实(+2.61%)、MLCC(+2.60%)、资源开采(+2.50%)、PLC概念(+2.44%)
-
-### 🧊 领跌方向
-
-| 板块 | 跌幅 | 备注 |
-|------|:----:|------|
-| 体育 | -10.01% | 概念股回调 |
-| 氨纶 | -7.67% | 化工细分 |
-| 防水材料 | -4.75% | 地产链 |
-| 稀土 | -4.42% | 资源回调 |
-| 铁矿石 | -3.34% | 大宗调整 |
-| 医美服务 | -3.10% | 消费承压 |
-| 汽车整车 | -2.26% | 新能源车板块 |
-
-**领跌概念**：彩票(-3.18%)、超跌股(-2.97%)、第四代半导体(-2.38%)、鸡肉(-2.13%)、体育产业(-1.96%)
-
----
-
-## 三、市场情绪分析
-
-| 指标 | 数据 | 判断 |
-|------|:----:|:----:|
-| 大盘涨跌 | 微跌0.09% | 弱势震荡 |
-| 权重表现 | 上证50 -0.77% | 权重偏弱 |
-| 涨跌方向 | **能源+科技 vs 消费+地产** | 结构性分化 |
-| 领涨强度 | 油气+4.5%/自动化+3.58% | 局部亢奋 |
-| 领跌幅度 | 体育-10%/氨纶-7.67% | 局部冰点 |
-
-**情绪判断：分歧阶段**
-- 涨停家数有限（从数据看无明显大面积涨停）
-- 市场表现为典型的结构性行情
-- 能源（油气/煤炭）和科技（半导体/自动化/通信线缆）是两线主线
-- 消费/地产链继续承压
-
-**操作建议**：半仓参与辨识度高的标的。关注能源+科技双主线。
-
----
-
-## 四、重要消息面
-
-1. **证监会：四家公募申报REITs指数证券投资基金**
-   - 华夏、中金、易方达、南方四家申报，公募REITs产品进一步扩容
-
-2. **SpaceX启动"1拆5"拆股计划**
-   - 为史上最大IPO扫清障碍，最快本周三递交上市申请
-   - 美股商业航天板块大涨（Rocket Lab +11%创新高）
-
-3. **美股盘前：费城半导体指数上涨1.3%**
-   - 芯片股反弹：NVDA +1.9%、AMD +4%、美光 +4%、英特尔 +5%
-   - 中概股龙头指数-0.5%，理想汽车-9.72%领跌
-
-4. **中航西飞：商业航天收入占比较小，暂未开展机器人业务**
-
-5. **伊朗最高领袖穆杰塔巴在美以战事中受伤细节披露**
-
----
-
-## 五、趋势研判
-
-### 大盘
-短期维持窄幅震荡格局。上证在4100-4150区间整理，方向性突破需要新催化。权重股走弱但题材活跃，市场赚钱效应尚可。
-
-### 关注方向
-- **⚡ 科技线**：半导体（数字芯片设计+2.08%、印制电路板+2.20%、被动元件领涨）、算力基建（通信线缆+4.20%）、工业自动化（+3.58%）
-- **🔥 能源线**：油气/煤炭延续强势，高股息逻辑延续，叠加夏季能源需求预期
-- **💡 智能电网**：逆变器+3.28%、电网自动化+2.81%，新能源消纳逻辑持续发酵
-- **⚠️ 回避**：体育、稀土、汽车整车、消费类
-
-### 操作策略
-- 仓位控制在半仓
-- 科技方向可小仓位参与半导体和自动化行情
-- 长线底仓维持红利方向（煤炭、油气等）
-- 警惕美股半导体反弹传导效应
-
----
-
-> ⚠️ 本报告为AI自动生成，仅供参考，不构成投资建议。投资有风险，入市需谨慎。
+</body>
+</html>
